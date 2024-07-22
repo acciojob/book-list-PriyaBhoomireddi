@@ -1,37 +1,33 @@
 // script.js
-document.getElementById('submit');
-	addEventListener('click', addBook);
-
-function addBook(e) {
-    e.preventDefault();
-    
-    // Get input values
+document.getElementById('submit').addEventListener('click', function() {
     const title = document.getElementById('title').value;
     const author = document.getElementById('author').value;
     const isbn = document.getElementById('isbn').value;
+    
+    if (title && author && isbn) {
+        const tableBody = document.getElementById('book-list');
+        const row = document.createElement('tr');
 
-    // Create a new row and cells
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td>${title}</td>
-        <td>${author}</td>
-        <td>${isbn}</td>
-        <td><button class="delete">Clear</button></td>
-    `;
+        row.innerHTML = `
+            <td>${title}</td>
+            <td>${author}</td>
+            <td>${isbn}</td>
+            <td><button class="delete">Clear</button></td>
+        `;
 
-    // Append the new row to the book list
-    document.getElementById('book-list').appendChild(row);
+        tableBody.appendChild(row);
 
-    // Clear the input fields
-    document.getElementById('title').value = '';
-    document.getElementById('author').value = '';
-    document.getElementById('isbn').value = '';
-}
-
-// Event delegation for deleting a book
-document.getElementById('book-list').addEventListener('click', function(e) {
-    if (e.target.classList.contains('delete')) {
-        e.target.parentElement.parentElement.remove();
+        // Clear input fields after adding the row
+        document.getElementById('title').value = '';
+        document.getElementById('author').value = '';
+        document.getElementById('isbn').value = '';
     }
 });
-//your JS code here. If required.
+
+// Delegate event handling for dynamically added rows
+document.getElementById('book-list').addEventListener('click', function(event) {
+    if (event.target && event.target.classList.contains('delete')) {
+        const row = event.target.closest('tr');
+        row.remove();
+    }
+});
